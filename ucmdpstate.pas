@@ -1,136 +1,198 @@
-unit Ucmdpstate ;
 
-{$mode objfpc}{$H+}
-{$MODESWITCH advancedrecords}    // note: in mode objfpc the modeswitch advancedrecords is needed
-{$X+}
+unit UCMDPACTION ;
+
+{$mode objfpc}
+{$H+}
+{$m+}          // directive to be used for using constructor
+{$MODESWITCH advancedrecords}     // note: in mode objfpc the modeswitch advancedrecords is needed
 
 interface
 
-uses Classes, SysUtils,StdCtrls;
- type
+uses Classes, SysUtils,StdCtrls,Ucmdpstate;
 
-     CMDPSTATE = class
+type
+    CMDPACTION = class
 
       public
-        // function
+          function Delete:boolean;
+          function IsValid():boolean;
+          procedure AddOutcome( OutcomeStateID:integer; OutcomeCost: integer; OutcomeProb: Double);
+          function GetIndofMostLikelyOutcome():integer;
+         function GetIndofOutcome(OutcomeID: integer):integer;
+         function DeleteAllOutcomes():boolean;
+         //operator
+
+        constructor cCMDPACTION(ID:integer; sourcestateid:integer);
+        destructor dCMDPACTION;
+
+ procedure DisableMemCheck();
+ procedure EnableMemCheck();
 
 
-        function Delete:boolean;
-	function ContainsPred( stateID: integer):boolean;
-	function  AddPred( stateID: integer ):boolean;
-	function RemovePred( stateID: integer): boolean;
-	function RemoveAllActions: boolean;
-         //>>>> CMDPACTION* AddAction(int ID);
-        //function GetAction(actionID:integer) : CMDPACTION;
-	/// >>>
-         constructor cCMDPSTATE(ID: integer);
-         destructor dCMDPSTATE;
+ //operators
 
 
+     //class operator = (const V,@rhsaction:CMDPACTION):boolean;
 
-          end;
-    var
+   end;
+
+
+   var
+
+    contador1,contador2,contador3,contador4,contador5,contador6,i,j:integer;
+      oind : integer;
+        tamanho:integer;
+     StateArray:^CMDPACTION;
+     RecordPtr : ^CMDPACTION;
+      action : ^CMDPACTION;
+        //int ActionID;
+	 ActionID:integer;
+	//int SourceStateID;
+	SourceStateID:integer;
+	//vector<int> SuccsID;
+	SuccsID:array of integer;
+	//vector<int> Costs;
+	Costs:array of integer;
+	//vector<float>
+         SuccsProb: array of double;
+         //int StateID;
          StateID: integer;
+         //void* PlannerSpecificData;
+         PlannerSpecificData: Pointer;
 
-         //vector<int> PredsID:integer;
- 	PredsID: array of integer;
-	//void* PlannerSpecificData;
-	PlannerSpecificData: Pointer;
-        //vector<CMDPACTION*> Actions;
 
+        CONST
+         EPS_ERROR  = 0.000001;
 
 
 implementation
+{$R *.dfm} // Include form
 
-//----------------------------------------------------------------------
 
-//----------------------------MDPSTATE class functions---------------
-function CMDPSTATE.RemoveAllActions: boolean;
+{class operator CMDPACTION.=const V,@rhsaction:CMDPACTION):boolean;
+    //ActionID := Addr(self);
 begin
-     result:=true;
-end;
 
-
-{CMDPSTATE.GetAction(actionID:integer ) : CMDPSTATE;
-begin
-  end;}
-
-function CMDPSTATE.RemovePred( stateID: integer): boolean;
-begin
-     result:=true;
-end;
-
-function CMDPSTATE.AddPred( stateID: integer ):boolean;
-begin
-    result:= true;
-end;
-
-   function CMDPSTATE.ContainsPred( stateID: integer):boolean;
-   begin
-       	result:= true;
-	end;
-
-
-function CMDPSTATE.Delete(): boolean;
-
-Begin  {
-	CMDPACTION^ action;
-          /// The current units form is addressable via the self keyword
-          PlannerSpecificData := Addr(self);
-
-           //LOL :=self.PlannerSpecificData ;
-	if( PlannerSpecificData <> nil)   then
-	begin
-		//SBPL_ERROR("ERROR deleting state: planner specific data is not deleted\n");
-		writeln('ERROR deleting state: planner specific data is not deleted');
-		//throw new SBPL_Exception();
-           //delete actions array
-	while((int)Actions.size() > 0)
-
-		action = Actions[Actions.size()-1];
-		Actions.pop_back();
-
-		action->Delete();
-		delete action;
-
-                   }
-	result:= true;
-	end;
-       {
-	//delete predecessors array
-      //  SetLength(PredsID,0);
+      Self.ActionID  := rhsaction.ActionID;
+ result := true;
+end;   }
 
 
 
-        //delete actions array
-
+  function CMDPACTION.Delete:boolean;
   begin
-	while(  Length(Actions) - 1 >0) do
-	begin
-		//action := Actions[Actions.size()-1];
-		//Actions.pop_back();
+  SetLength(SuccsID,0);
+  SetLength(Costs,0);
+  SetLength(SuccsProb, 0);
+   result := true;
+  end;
+  function CMDPACTION.DeleteAllOutcomes():boolean;
+          begin
+               SetLength(SuccsID,0);
+         SetLength(Costs,0);
+         SetLength(SuccsProb,0);
+         result := true;
+          end;
 
-		action^.Delete();
-		dispose action; //delete
+
+ function CMDPACTION.IsValid():boolean;
+       var
+       prob: double;
+        i:   integer;
+        intSuccesProb:integer;
+        Begin
+         Prob := 0;
+         intSuccesProb := Length( SuccsProb);
+        for i := 0 to intSuccesProb  do
+        Begin
+                Prob := Prob+ SuccsProb[i];
+        end;
+
+        result := (Abs(Prob-1.0) < EPS_ERROR);
+end;
+       procedure CMDPACTION.EnableMemCheck();
+       begin
+
+       end;
+        procedure CMDPACTION.DisableMemCheck();
+       begin
+
+       end;
+
+procedure CMDPACTION.AddOutcome( OutcomeStateID:integer; OutcomeCost: integer; OutcomeProb: Double);
+     begin
+          {$IFDEF MEM_CHECK}
+          DisableMemCheck();
+
+
+        //SuccsID.push_back(OutcomeStateID);
+        SetLength(SuccsID, 0);
+        //Costs.push_back(OutcomeCost);
+         SetLength(SuccsID, 0);
+        //SuccsProb.push_back(OutcomeProb);
+        SetLength(SuccsID, 0);
+
+        {$IFDEF MEM_CHECK}
+        EnableMemCheck();
+        {$ENDIF}
+        {$ENDIF}
+
+
+     end;
+
+         function CMDPACTION.GetIndofMostLikelyOutcome():integer;
+           var
+          HighestProb :double ;
+          mlind: integer;
+
+         begin
+
+        HighestProb := 0;
+        mlind := -1;
+        tamanho := Length(SuccsID);
+
+        for oind := 0 to  tamanho do // ponteiro THIS
+        Begin
+                if(SuccsProb[oind] >= HighestProb) then
+                Begin
+                        mlind := oind;
+                        HighestProb := SuccsProb[oind]; // ponteiro THIS
+                end;
+        end;
+
+         result:=mlind;
+         end;
+
+         function CMDPACTION.GetIndofOutcome(OutcomeID: integer):integer;
+
+         begin
+                 tamanho:=  Length(SuccsID);
+                	for oind := 0 to tamanho do // ponteiro this
+	begin
+		if(SuccsID[oind] = OutcomeID)    then
+		begin
+			result:= oind;
+		end;
 	end;
 
-	result := true;
+	result := -1;
 end;
-   }
 
-constructor CMDPSTATE.cCMDPSTATE( ID:integer);
-   begin
-           	StateID := ID;
+
+         constructor CMDPACTION.cCMDPACTION(ID:integer; sourcestateid:integer);
+         begin
+               ActionID := ID;
+		SourceStateID := sourcestateid;     // 1
 		PlannerSpecificData := nil;
- end;
+	  end;
 
-destructor CMDPSTATE.dCMDPSTATE;
-begin
-     if(PlannerSpecificData <> Nil) then
+          destructor CMDPACTION.dCMDPACTION;
+          begin
+          if(PlannerSpecificData <> nil )  then
 		begin
 			//SBPL_FPRINTF(stderr, "ERROR: state deletion: planner specific data is not deleted\n");
 			//throw new SBPL_Exception();
 		end;
-end;
-end.
+        end;
 
+end.
