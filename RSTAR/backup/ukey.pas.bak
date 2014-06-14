@@ -1,0 +1,27 @@
+unit Ukey;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  Classes, SysUtils;
+
+
+type
+
+
+  CKey = class
+  private
+      const
+   KEY_SIZE :=2 ;
+      key[KEY_SIZE] Array of LongInt ;
+  public
+    { public declarations }
+
+  end;
+
+implementation
+
+end.
+

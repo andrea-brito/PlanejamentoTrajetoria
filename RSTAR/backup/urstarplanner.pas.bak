@@ -1,0 +1,163 @@
+{
+unit URSTARPlanner ;
+
+{$mode objfpc}{$H+}
+
+interface
+     {
+uses Classes, SysUtils, FileUtil,Controls, StdCtrls;
+  {
+type
+
+  RSTARPlanner = class
+
+    private
+
+   // public SBPLPlanner
+       //brief replan a path within the allocated time, return the solution in the vector
+
+
+           public
+      // >>> virtual int replan(double allocated_time_secs, vector<int>* solution_stateIDs_V);
+      function replan(dallocated_time_secs: double; solution_stateIDs_V: Array of integer): integer; virtual;
+
+
+
+
+      //brief replan a path within the allocated time, return the solution in the vector, also returns solution cost
+
+      // >>> virtual int replan(double allocated_time_sec, vector<int>* solution_stateIDs_V, int* solcost);
+      function replan(dallocated_time_secs: real; solution_stateIDs_V: Array of integer; solcost:integer): integer; virtual;
+      // >>> virtual int set_goal(int goal_stateID);
+
+      function  set_goal ( goal_stateID: integer ): integer; virtual; Abstract;
+     // >>> virtual int set_start(int start_stateID);
+     function  set_start( start_stateID: integer ): integer; virtual; Abstract;
+     // >>> virtual int set_start(int start_stateID);
+     function set_startal ( start_stateID: integer ): integer; virtual; Abstract;
+     // >>> virtual void (StateChangeQuery const & stateChange);
+    // procedure  costs_changed ( StateChangeQuery const @stateChange ): integer; virtual; Abstract;
+      // >>>  virtual void costs_changed();
+     procedure costs_changed();  virtual; Abstract;
+     // >>>  virtual int force_planning_from_scratch();
+     function   force_planning_from_scratch() : integer;  virtual; Abstract;
+     // >>> virtual int set_search_mode(bool bSearchUntilFirstSolution);
+     function  set_search_mode( bSearchUntilFirstSolution: boolean ): integer;  virtual; Abstract;
+     //>>>*** virtual double get_solution_probabilisticeps() const {return pSearchStateSpace->eps_satisfied;};
+     //>>>***  virtual int get_highlevel_expands() const { return highlevel_searchexpands; }
+     //>>>*** virtual int get_lowlevel_expands() const { return lowlevel_searchexpands; }
+     //>>>*** virtual void set_initialsolution_eps(double initialsolution_eps) {finitial_eps = initialsolution_eps;};
+   ///***  procedure print_searchpath(FILE^ fOut);  virtual; Abstract;
+
+
+        protected
+         finitial_eps: boolean;
+         bforwardsearch: boolean;
+         bsearchuntilfirstsolution: boolean; //if true, then search until first solution only (see planner.h for search modes)
+
+        {RSTARSearchStateSpace_t^ pSearchStateSpace;
+	RSTARLSearchStateSpace_t^ pLSearchStateSpace;
+        unsigned int highlevel_searchexpands;
+	lowlevel_searchexpands: ;
+	MaxMemoryCounter: integer;
+	clock_t TimeStarted;         // CLOCK está na classe time.h definida em typedef long clock_t;
+	FILE ^fDeb;   }
+
+        //member functions
+          //>>> virtual void Initialize_searchinfo(CMDPSTATE* state);
+         //  procedure Initialize_searchinfo(CMDPSTATE^ state); virtual;
+	  //>>> virtual CMDPSTATE* CreateState(int stateID);
+          //CMDPSTATE^ CreateState(stateID: integer); virtual;
+          //CMDPSTATE^ GetState( stateID: integer);   virtual;
+
+          //function ComputeHeuristic(CMDPSTATE^ MDPstate):integer; virtual;
+
+          //initialization of a state
+	//>>> virtual void InitializeSearchStateInfo(RSTARState* state);
+
+	//re-initialization of a state
+        //procedure ReInitializeSearchStateInfo(RSTARState^ state); virtual;
+
+        //procedure DeleteSearchStateData(RSTARState^ state); virtual;
+	//procedure DeleteSearchActionData(RSTARACTIONDATA* actiondata); virtual ;
+
+	//function GetGVal( StateID: integer); virtual;
+
+	//returns 1 if the solution is found, 0 if the solution does not exist and 2 if it ran out of time
+	 //function ImprovePath(MaxNumofSecs: real); virtual;
+
+	//note this does NOT re-compute heuristics, only re-orders OPEN list based on current eps and h-vals
+	 //procedure Reevaluatefvals();  virtual;
+
+         //creates (allocates memory) search state space
+	//does not initialize search statespace
+	 function CreateSearchStateSpace():integer; virtual
+
+	//deallocates memory used by SearchStateSpace
+	 //DeleteSearchStateSpace():integer; virtual;
+
+	//debugging
+	 //procedure PrintSearchState(RSTARState^ state, FILE^ fOut); virtual;
+
+
+	//reset properly search state space
+	//needs to be done before deleting states
+	 //procedure ResetSearchStateSpace(); virtual;
+
+	//initialization before each search
+	//procedure  ReInitializeSearchStateSpace(); virtual;
+
+	//very first initialization
+	function InitializeSearchStateSpace():integer; virtual;
+
+      //setting start/goal
+      function SetSearchGoalState(SearchGoalStateID:integer):integer; virtual;
+      function SetSearchStartState(SearchStartStateID:integer):integer; virtual;
+
+      function getHeurValue(StateID: integer): integer; virtual;
+
+	//get path
+       //"DUVIDA vector<int> GetSearchPath(int& solcost);   virtual;
+	procedure  PrintSearchPath(FILE^ fOut);  virtual;
+
+	//the actual search
+	//DUVIDA virtual bool Search(vector<int>& pathIds, int & PathCost, bool bFirstSolution, bool bOptimalSolution, double MaxNumofSecs);
+	//local search
+	//DUVIDA virtual bool ComputeLocalPath(int StartStateID, int GoalStateID, int maxc, int maxe,int *pCost, int *pCostLow, int *pExp, vector<int>* pPathIDs, int* pNewGoalStateID, double maxnumofsecs);
+         function computeLocalPath(StartStateID: integer;):boolean; virtual;
+	//global search functions
+	 procedure  SetBestPredecessor(RSTARState^ rstarState, RSTARState^ rstarPredState, CMDPACTION^ action); virtual
+	  CKey ComputeKey(RSTARState^ rstarState);   virtual
+          //local search functions
+	 procedure Initialize_rstarlsearchdata(CMDPSTATE^ state);virtual;
+	 procedure CMDPSTATE^ CreateLSearchState( stateID: intenger ); virtual;
+	 procedure CMDPSTATE^ GetLSearchState( stateID: intenger);virtual;
+	 function DestroyLocalSearchMemory():boolean; virtual ;
+	CKey LocalSearchComputeKey(RSTARLSearchState^ rstarlsearchSta); virtual;
+
+
+
+
+  end;
+  var
+     solcost:^integer;
+      contador:integer;
+      solution_stateIDs_V : Array of integer;   //array[1..NumMax] of integer;
+
+ implementation
+         SetLength(solution_stateIDs_V, contador + 1);
+
+
+ constructor tRSTARPlanner.RSTARPlanner();
+ begin
+
+   end;
+  destructor tRSTARPlanner.dRSTARPlanner;
+            begin
+
+            end;
+end.
+
+}
+}
+}

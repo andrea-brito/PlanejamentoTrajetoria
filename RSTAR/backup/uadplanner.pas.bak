@@ -1,0 +1,14 @@
+unit Uadplanner;
+
+{$mode objfpc}{$H+}
+
+interface
+     StateChangeQuery = class
+
+uses
+  Classes, SysUtils;
+
+implementation
+
+end.
+

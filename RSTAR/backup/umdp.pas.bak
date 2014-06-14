@@ -1,0 +1,25 @@
+unit UMDP;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,Ucmdpstate,UCMDPACTION,CMDP;
+
+implementation
+
+function CMDPACTION.Delete:boolean;
+    begin
+     //não achei uma tradução ainda para EXTA CLEAR  mas acho que isso resolve =D
+
+        SetLength(SuccsID,contador4-1);
+        SetLength(Costs,contador5-1);
+        SetLength(SuccsProb, contador6-1);
+        result := true;
+
+end;
+
+
+end.
+

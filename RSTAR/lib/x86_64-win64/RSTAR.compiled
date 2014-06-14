@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <Compiler Value="C:\lazarus\fpc\2.6.2\bin\x86_64-win64\fpc.exe" Date="1125672322"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -WG -vewnhi &quot;-FiC:\Users\Abraão Állysson\Desktop\Projeto\RSTAR\lib\x86_64-win64&quot; -FuC:\lazarus\lcl\units\x86_64-win64\win32 -FuC:\lazarus\lcl\units\x86_64-win64 -FuC:\lazarus\components\lazutils\lib\x86_64-win64 -FuC:\lazarus\packager\units\x86_64-win64 &quot;-FuC:\Users\Abraão Állysson\Desktop\Projeto\RSTAR\&quot; &quot;-FUC:\Users\Abraão Állysson\Desktop\Projeto\RSTAR\lib\x86_64-win64\&quot; -l -dLCL -dLCLwin32 RSTAR.lpr"/>
+  <Complete Value="False"/>
+</CONFIG>
