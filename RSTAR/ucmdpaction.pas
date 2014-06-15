@@ -21,7 +21,7 @@ type
          constructor cCMDPACTION(ID:integer; sourcestateid:integer);
          destructor dCMDPACTION;
       public
-          procedure AddOutcome( OutcomeStateID:integer; OutcomeCost: integer; OutcomeProb: Double);
+          procedure AddOutcome(OutcomeStateID:integer; OutcomeCost:integer; OutcomeProb:Double);
           procedure DisableMemCheck();
           procedure EnableMemCheck();
 
@@ -132,12 +132,15 @@ begin
      mlind := -1;
     // tamanho := Length(SuccsID);       // Isso foi você que incluiu ?
 
-     for oind := 0 to oind < Length(Self.SuccsID) do // ponteiro THIS
+     //for oind := 0 to oind < Length(Self.SuccsID) do | Não estou vendo outro SuccID nesse método
+     for oind := 0 to oind < Length(SuccsID) do   // Essa condição de parada, está certa ?
      Begin
-         if(self.SuccsProb[oind] >= HighestProb) then
-         Begin
+         //if(self.SuccsProb[oind] >= HighestProb) then | Não estou vendo outro SuccsProb nesse metodo
+         if(SuccsProb[oind] >= HighestProb) then
+            Begin
               mlind := oind;
-              HighestProb := self.SuccsProb[oind]; // ponteiro THIS
+              //HighestProb := self.SuccsProb[oind]; // ponteiro THIS
+              HighestProb := SuccsProb[oind]; // ponteiro THIS
          end;
      end;
      result:=mlind;
@@ -148,7 +151,8 @@ begin
      //tamanho:=  Length(SuccsID);  Não compreendi se esse aqui era igual ao anterior
      for oind := 0 to tamanho do // ponteiro this
      begin
-	if(Self.SuccsID)[oind] = OutcomeID) then
+	//if(Self.SuccsID)[oind] = OutcomeID) then     | Não estou vendo outro SuccsID nesse método
+        if(SuccsID)[oind] = OutcomeID) then
 	begin
 	     result:= oind;
 	end;

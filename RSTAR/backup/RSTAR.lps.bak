@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="11">
+      <Unit0>
+        <Filename Value="RSTAR.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="RSTAR"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="42" Y="10"/>
+        <UsageCount Value="145"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="urstar.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Urstar"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="6" Y="1"/>
+        <UsageCount Value="51"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="urstarplanner.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="URSTARPlanner"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <ExtraEditorCount Value="1"/>
+        <ExtraEditor1>
+          <WindowIndex Value="0"/>
+          <TopLine Value="1"/>
+          <CursorPos X="1" Y="1"/>
+        </ExtraEditor1>
+        <UsageCount Value="145"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="ukey.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Ukey"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="138"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="mpd.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="mpd"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="25" Y="8"/>
+        <UsageCount Value="128"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="ucmdpaction.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UCMDPACTION"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="122"/>
+        <CursorPos X="13" Y="139"/>
+        <UsageCount Value="55"/>
+        <Loaded Value="True"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="uadplanner.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Uadplanner"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="22"/>
+        <UsageCount Value="124"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="ucmdpstate.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ucmdpstate"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="101"/>
+        <CursorPos X="15" Y="110"/>
+        <UsageCount Value="54"/>
+        <Loaded Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="umdp.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UMDP"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="12"/>
+        <UsageCount Value="50"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="cmdp.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="CMDP"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="26"/>
+        <CursorPos X="33" Y="7"/>
+        <UsageCount Value="47"/>
+        <Loaded Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="..\Área de Trabalho\Abraão Állysson\universidade\2º Período\LP1\Linguagem Técnina de Programação\Figura.pas"/>
+        <UnitName Value="Figura"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="24" Y="12"/>
+        <UsageCount Value="2"/>
+      </Unit10>
+    </Units>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="10" HistoryIndex="9">
+      <Position1>
+        <Filename Value="ucmdpaction.pas"/>
+        <Caret Line="156" Column="20" TopLine="134"/>
+      </Position1>
+      <Position2>
+        <Filename Value="ucmdpaction.pas"/>
+        <Caret Line="122" Column="79" TopLine="1"/>
+      </Position2>
+      <Position3>
+        <Filename Value="ucmdpaction.pas"/>
+        <Caret Line="138" Column="28" TopLine="119"/>
+      </Position3>
+      <Position4>
+        <Filename Value="ucmdpaction.pas"/>
+        <Caret Line="24" Column="89" TopLine="8"/>
+      </Position4>
+      <Position5>
+        <Filename Value="ucmdpaction.pas"/>
+        <Caret Line="135" Column="42" TopLine="119"/>
+      </Position5>
+      <Position6>
+        <Filename Value="ucmdpaction.pas"/>
+        <Caret Line="24" Column="77" TopLine="8"/>
+      </Position6>
+      <Position7>
+        <Filename Value="ucmdpaction.pas"/>
+        <Caret Line="135" Column="42" TopLine="119"/>
+      </Position7>
+      <Position8>
+        <Filename Value="ucmdpaction.pas"/>
+        <Caret Line="31" Column="25" TopLine="15"/>
+      </Position8>
+      <Position9>
+        <Filename Value="ucmdpaction.pas"/>
+        <Caret Line="135" Column="37" TopLine="119"/>
+      </Position9>
+      <Position10>
+        <Filename Value="ucmdpaction.pas"/>
+        <Caret Line="136" Column="37" TopLine="122"/>
+      </Position10>
+    </JumpHistory>
+  </ProjectSession>
+  <EditorMacros Count="0"/>
+</CONFIG>
