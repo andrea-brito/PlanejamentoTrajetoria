@@ -17,20 +17,29 @@ type
          function GetIndofMostLikelyOutcome():integer;
          function GetIndofOutcome(OutcomeID: integer):integer;
          function DeleteAllOutcomes():boolean;
+        protected
+
       public
+
          constructor cCMDPACTION(ID:integer; sourcestateid:integer);
          destructor dCMDPACTION;
       public
           procedure AddOutcome( OutcomeStateID:integer; OutcomeCost: integer; OutcomeProb: Double);
           procedure DisableMemCheck();
           procedure EnableMemCheck();
+          end;
 
-          // Não jefferson não estou errando é porque o  OPERADOR está recebendo a classe CMDPACTION
-          class operator = (const V,@rhsaction:CMDPACTION):boolean;
+          tCMDPACTION = record
+            function StateID:integer;
+             property ActionID:integer;
+          // Bixo, tu tá errando a mesma coisa, sobrecarga é com registradores, tem que prestar atenção vei.
+          class operator = (const V,rhsaction: tCMDPACTION):boolean;
      end;
 
 
    var
+    // Esses contadores são para quÊ ? Se incluiu, tu tem que colocar um comentário
+    //contador1,contador2,contador3,contador4,contador5,contador6,i,j:integer;
     oind : integer;
     StateArray:^CMDPACTION;
     RecordPtr : ^CMDPACTION;
@@ -50,12 +59,16 @@ implementation
 
 {$R *.dfm} // Include form   DFM ou LFM ?
 
-class operator CMDPACTION.=const V,@rhsaction:CMDPACTION):boolean;
+class operator tCMDPACTION.= (const V,rhsaction:tCMDPACTION): Boolean;
+  begin
+      //this->StateID = rhsstate.StateID;
+       result  := rhsaction.StateID;
 
+end;
+
+function CMDPACTION.StateID:integer;
 begin
-
-      ActionID  := rhsaction.ActionID;
- result := true;
+     result :=  ActionID;
 end;
 
 function CMDPACTION.Delete:boolean;
@@ -92,12 +105,12 @@ end;
 
 procedure CMDPACTION.EnableMemCheck();
 begin
-      // é uma função que não tem "tradução" olha na biblioteca UTILS, linha 54
+      // Não conseguir traduzir
 end;
 
 procedure CMDPACTION.DisableMemCheck();
 begin
-     // é uma função que não tem "tradução" olha na biblioteca UTILS, linha 37
+     // Não conseguir traduzir
 end;
 
 procedure CMDPACTION.AddOutcome( OutcomeStateID:integer; OutcomeCost: integer; OutcomeProb: Double);
@@ -165,7 +178,5 @@ begin
 	     //SBPL_FPRINTF(stderr, "ERROR: state deletion: planner specific data is not deleted\n");
 	     //throw new SBPL_Exception();
         end;
-end;
-
+   end;
 end.
-

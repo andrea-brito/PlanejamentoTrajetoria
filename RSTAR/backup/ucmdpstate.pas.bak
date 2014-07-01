@@ -9,191 +9,201 @@ unit ucmdpstate ;
 interface
 
 uses Classes, SysUtils,StdCtrls,UCMDPACTION;
- type
 
-     CMDPSTATE = class
+type
+    CMDPSTATE = class
 
       public
-        // function
 
 
-        function Delete:boolean;
-	function ContainsPred( stateID: integer):boolean;
-	function  AddPred( stateID: integer ):boolean;
-	function RemovePred( stateID: integer): boolean;
-	function RemoveAllActions: boolean;
-    //>>>> CMDPACTION* AddAction(int ID);
-    function GetAction(actionID:integer) : CMDPACTION;
-	/// >>>
-         constructor cCMDPSTATE(ID: integer);
-         destructor dCMDPSTATE;
 
-            // Não jefferson não estou errando é porque o  OPERADOR está recebendo a classe CMDPstate
-           class operator = (const V,@rhsaction:CMDPSTATE ):boolean;
+          function Delete:boolean;
+          function RemoveAllActions():boolean;
+          function RemovePred(stateID: integer):integer;
+          function AddAction(ID: integer):CMDPACTION;
+          function GetAction(actionID: integer):integer;
+          function AddPred(stateID: integer):boolean;
+          function ContainsPred(stateID:integer):boolean;
 
-          end;
-    var
-         StateID: integer;
 
-         //vector<int> PredsID:integer;
- 	PredsID: array of integer;
-	//void* PlannerSpecificData;
-	PlannerSpecificData: Pointer;
-        //vector<CMDPACTION*> Actions;
-         Actions: array of integer;
+         //operator
 
+        constructor cCMDPSTATE(ID:integer);
+        destructor dCMDPSTATE;
+
+ procedure DisableMemCheck();
+ procedure EnableMemCheck();
+
+
+ //operators
+      {
+           CMDPACTION = record    // Bixo, tu tá errando a mesma coisa, sobrecarga é com registradores, tem que prestar atenção vei.
+           public
+          class operator = (const V,@rhsaction:CMDPACTION): boolean;
+     end;   }
+
+   end;
+
+
+   var
+
+    contador1,contador2,contador3,contador4,contador5,contador6,i,j:integer;
+      oind : integer;
+        tamanho:integer;
+     StateArray:^CMDPACTION;
+     RecordPtr : ^CMDPACTION;
+     Actions: array of integer;
+      PredsID: integer;
+
+
+        CONST
+         EPS_ERROR  = 0.000001;
 
 
 implementation
+{$R *.dfm} // Include form
 
-//----------------------------------------------------------------------
 
-//----------------------------MDPSTATE class functions---------------
+{class operator CMDPACTION.=const V,@rhsaction:CMDPACTION):boolean;
+    //ActionID := Addr(self);
+begin
 
-function CMDPSTATE.Delete(): boolean;
+      Self.ActionID  := rhsaction.ActionID;
+ result := true;
+end;   }
 
-Begin
-	  action : ^CMDPACTION;
 
-	if(PlannerSpecificData <> NULL)     then
-         begin
-	//	SBPL_ERROR("ERROR deleting state: planner specific data is not deleted\n");
-       //	throw new SBPL_Exception();
+
+  function CMDPSTATE.Delete:boolean;
+  action : ^CMDPACTION;
+  begin
+
+	if(self.PlannerSpecificData <> nil)
+	begin
+		//SBPL_ERROR("ERROR deleting state: planner specific data is not deleted\n");
+		//throw new SBPL_Exception();
+        end;
 
 
 	//delete predecessors array
-	PredsID.clear;
+	SetLength(PredsID,0);
 
-       end;
-
-        //delete actions array
-	while(Length(Actions) > 0)
-
-		action = Actions[Length(Actions)-1];
-		 SetLength(Actions,Length(Actions)-1);
-
-		action^.Delete();
-		action.Free;
-
-            result := true;
-  end;
-
-
-
-function CMDPSTATE.RemoveAllActions: boolean;
-begin
-
-          action: ^CMDPACTION;
 
 	//delete actions array
-	while(Lengt(Actions) > 0)  do
+	while((int)Actions > 0)
 	begin
-		action := Actions[Length(Actions-1)];
-               SetLength(Actions,Length(Actions-1));
-
+		action := Actions[Length(Actions)-1];
+		SetLength(PredsID,Length(PredsID)-1);
 
 		action^.Delete();
-		action.Free;
-	end;
-
-     result:=true;
-end;
-
-
-
-
-function CMDPSTATE.RemovePred( stateID: integer): boolean;
-begin
-
-	for(int i = 0 to  Length(redsID)) do
-	begin
-          //VETOR .at
-	{	if(this->PredsID.at(i) = stateID)
-		begin
-			this->PredsID.at(i) = this->PredsID.at(this->PredsID.size()-1);
-			this->PredsID.pop_back();
-			return true;
-                end;
-                 }
-	end;
-
-     result:=true;
-        end;
-class operator CMDPSTATE .=const V,@rhsaction:CMDPSTATE ):boolean;
-
-
-begin
-
-     Self.ActionID  := rhsaction.ActionID;
- result := true;
-
-end;
-
-
-
-
-
-function CMDPSTATE.AddPred( stateID: integer ):boolean;
-begin
-     //add the predecessor
-	if(not ContainsPred(stateID)) then
-        begin
-        {$IFDEF MEM_CHECK}
-	DisableMemCheck();
-        {$ENDIF}
-
-     SetLength(PredsID,Length(stateID-1));
-
-    {$IFDEF MEM_CHECK}
-	EnableMemCheck();
-        {$ENDIF}
-	end;
-    result:= true;
-end;
-
-   function CMDPSTATE.ContainsPred( stateID: integer):boolean;
-   begin
-
-              for(i = 0; to i < Lengt(PredsID)) do
-	begin
-		if(PredsID[i] = stateID) then
-			result := true;
+		 action.Free;
         end;
 
-       	result:= true;
-	end;
 
-    function CMDPSTATE.GetAction(actionID:integer ) : CMDPACTION;
-begin
-      for(int i = 0; i < (int)Actions.size(); i++)
-	begin
-		if(Actions[i]^.ActionID = actionID)  then
-		result :=Actions[i];
-	end;
-
-	result := nil;
-
+	 result := true;
   end;
 
 
-constructor CMDPSTATE.cCMDPSTATE( ID:integer);
-   begin
-           	StateID := ID;
-		PlannerSpecificData := nil;
- end;
 
-destructor CMDPSTATE.dCMDPSTATE;
-begin
-     if(PlannerSpecificData <> Nil) then
+ function CMDPSTATE.AddAction(ID: integer):CMDPACTION;
+
+        Begin
+         //CMDPACTION*
+        action := CMDPACTION(ID, self^.StateID);
+
+         {$IFDEF MEM_CHECK}
+	DisableMemCheck();
+         {$ENDIF}
+
+	SetLength(action,Length(Actions)-1);  //Actions.push_back(action);
+
+         {$IFDEF MEM_CHECK}
+	EnableMemCheck();
+         {$ENDIF}
+
+
+	result := action;
+
+end;
+       function CMDPSTATE.AddPred(stateID: integer):boolean;
+       begin
+        {$IFDEF MEM_CHECK}
+             DisableMemCheck();
+      {$ENDIF}
+
+              SetLength(PredsID,Length(stateID)-1); //PredsID.push_back(stateID);
+      {$IFDEF MEM_CHECK}
+             DisableMemCheck();
+      {$ENDIF}
+              result := true;
+       end;
+        function CMDPSTATE.RemovePred(stateID: integer):integer;
+       begin
+            for i := 0 to self.(PredsID) do
+	begin
+		if(self.PredsID.at(i) = stateID)  then
+		begin
+			self.PredsID.at(i) := self.PredsID.at(self.Legth(PredsID-1); //http://www.cplusplus.com/reference/vector/vector/at/
+			self.SetLength(PredsID,Length(Actions)-1);
+			result := true;
+		end;
+       end;
+
+	//can happen when a state is twice a successor
+	//SBPL_ERROR("ERROR in RemovePred: no Pred is found\n");
+	//throw new SBPL_Exception();
+
+	result := false;
+       end;
+
+          //requires the deletion of Preds elsewhere
+         function CMDPACTION.RemoveAllActions():boolean;
+            begin
+             while (Legth(Actions) > 0) do
+                  begin
+                     action := Actions[Legth(Actions-1)];
+		  Length(Actions)-1); //Actions.pop_back();
+
+		action^.Delete();
+		 action.free;
+	end;
+
+	result  := true;
+                  end;
+        function CMDPACTION.ContainsPred(stateID:integer):boolean;
+           begin
+            for i := 0 to 10 do
+	begin
+		if(PredsID[i] = stateID)
+			return := true;
+               end;
+            result  := false;
+            end;
+
+                  function CMDPACTION.GetAction(actionID: integer):integer;
+                  begin
+                   for i := 0 to < Legth(Actions) do
+                   if(Actions[i]^.ActionID = actionID)
+		begin
+                           result := Actions[i];
+                           end;
+
+	result := nil;
+                   end;
+
+         constructor CMDPACTION.cCMDPSTATE(ID:integer);
+         begin
+                   StateID := ID;
+		PlannerSpecificData := nil;
+	  end;
+
+          destructor CMDPACTION.dCMDPACTION;
+          begin
+          if(PlannerSpecificData <> nil )  then
 		begin
 			//SBPL_FPRINTF(stderr, "ERROR: state deletion: planner specific data is not deleted\n");
 			//throw new SBPL_Exception();
 		end;
-end;
-
-
-
+        end;
 
 end.
-
-
